@@ -2,6 +2,8 @@ const http = require("http");
 const mime = require("mime");
 const fs = require("fs");
 const path = require("path");
+const chatServer = require('./lib/chat_server')
+
 
 let cache = {}; // cache object is where the contents of cached files are stored
 
@@ -57,6 +59,8 @@ const server = http.createServer(function (request, response) {
   let absPath = "./" + filePath;
   serveStatic(response, cache, absPath);
 });
+
+chatServer.listen(server)
 
 server.listen(3000, function () {
   console.log("Server listening on port 3000.");
