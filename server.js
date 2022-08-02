@@ -15,7 +15,7 @@ function send404(response) {
 // Sendfile helper function
 function sendFile(response, filePath, fileContents) {
   response.writeHead(200, {
-    "content-Type": mime.lookup(path.basename(filePath)),
+    "content-Type": mime.getType(path.basename(filePath)),
   });
   response.end(fileContents);
 }
@@ -44,3 +44,20 @@ function serveStatic(response, cache, absPath) {
     });
   }
 }
+
+// HTTP Server
+const server = http.createServer(function (request, response) {
+  let filePath = false;
+
+  if (request.url == "/") {
+    filePath = "public/index.html";
+  } else {
+    filePath = "public" + request.url;
+  }
+  let absPath = "./" + filePath;
+  serveStatic(response, cache, absPath);
+});
+
+server.listen(3000, function () {
+  console.log("Server listening on port 3000.");
+});
